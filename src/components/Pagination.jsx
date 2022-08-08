@@ -1,3 +1,6 @@
+/**
+ * @author Alek Michael
+ */
 import "../css/pagination.scss";
 
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/outline";
@@ -15,9 +18,13 @@ function Pagination({
   pageSize,
   pageSizeOptions,
 }) {
+  // Total page amt
+  const totalPages = Math.ceil(totalCount / pageSize);
+
   const paginationRange = usePagination({
     currentPage,
     totalCount,
+    totalPages,
     pageSize,
   });
 
@@ -42,7 +49,7 @@ function Pagination({
           // Do not remove the aria-label below, it is used for Hatchways automation.
           aria-label="Goto previous page"
           onClick={onPrevious}
-          disabled={false} // change this line to disable a button.
+          disabled={currentPage == 1 ? true : false} // if we are at the first page we cannot go back
         >
           <ChevronLeftIcon />
         </button>
@@ -63,7 +70,7 @@ function Pagination({
           <li
             key={key}
             className="paginationItem"
-            aria-current="false" // change this line to highlight a current page.
+            aria-current={pageNumber == currentPage ? "page" : "false"} // select the current page
           >
             <button
               type="button"
@@ -84,7 +91,7 @@ function Pagination({
           // Do not remove the aria-label below, it is used for Hatchways automation.
           aria-label="Goto next page"
           onClick={onNext}
-          disabled={false} // change this line to disable a button.
+          disabled={currentPage == totalPages ? true : false} // if this is the last page, disable the next button as we can not go any further.
         >
           <ChevronRightIcon />
         </button>
@@ -96,7 +103,8 @@ function Pagination({
         aria-label="Select page size"
         value={pageSize}
         onChange={(e) => {
-          onPageSizeOptionChange(e.target.value);
+          onPageSizeOptionChange(Number(e.target.value));
+          onPageChange(1);
         }}
       >
         {pageSizeOptions.map((size) => (
