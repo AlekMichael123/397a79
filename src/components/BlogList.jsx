@@ -1,56 +1,22 @@
-/**
- * @author Alek Michael
- */
 import BlogPost from "./BlogPost";
 import Pagination from "./Pagination";
 import React from "react";
 import blogs from "../data/blogs.json";
-import { useState } from "react";
-import { useEffect } from "react";
 
 const PAGE_SIZES = [15, 25, 50, 100];
 
 function BlogList() {
-  /**
-   * The first thing I changed was making these into states.
-   * This allows easier writing for me in the child components.
-   */
-  // Current Page Index
-  const [currentPage, setCurrentPage] = useState(1);
-  // Maximum items per page
-  const [currentRowsPerPage, setCurrentRowsPerPage] = useState(15);
-  // The actual user information to be displayed, calculated in useEffect below
-  const [currentPaginationData, setCurrentPaginationData] = useState([]);
-  // Anytime the page or page size change, we'll have to "re-fetch" the user data
-  useEffect(() => {
-    // if in bounds, get the full slice
-    if (currentPage * currentRowsPerPage <= blogs.posts.length)
-      setCurrentPaginationData(
-        blogs.posts.slice(
-          (currentPage - 1) * currentRowsPerPage,
-          currentPage * currentRowsPerPage
-        )
-      );
-    // otherwise, just get the rest
-    else
-      setCurrentPaginationData(
-        blogs.posts.slice(
-          (currentPage - 1) * currentRowsPerPage,
-          blogs.posts.length
-        )
-      );
-  }, [currentPage, currentRowsPerPage]);
+  const currentPaginationData = blogs.posts.slice(0, 15);
 
-  // functions to be passed down to Pagination component, changes the state here
-  const updateRowsPerPage = (rows) => setCurrentRowsPerPage(rows);
-  const updatePage = (page) => setCurrentPage(page);
+  const updateRowsPerPage = () => {};
+  const updatePage = () => {};
 
   return (
     <div>
       <Pagination
-        currentPage={currentPage}
+        currentPage={1}
         totalCount={blogs.posts.length}
-        pageSize={currentRowsPerPage}
+        pageSize={15}
         pageSizeOptions={PAGE_SIZES}
         onPageChange={updatePage}
         onPageSizeOptionChange={updateRowsPerPage}
