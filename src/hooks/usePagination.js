@@ -1,11 +1,10 @@
 /**
  * @author Alek Michael
  */
-import PropTypes from "prop-types";
 
 export const DOTS = "...";
 
-function usePagination({ currentPage, totalCount, totalPages, pageSize }) {
+function usePagination(currentPage, totalPages) {
   /*
    * The usePagination hook returns the pagination range based off the current page and how many pages are available.
    */
@@ -16,7 +15,7 @@ function usePagination({ currentPage, totalCount, totalPages, pageSize }) {
   if (totalPages == 3) return [1, 2, 3];
 
   // every range begins with the first page
-  let range = [1];
+  const range = [1];
 
   // get siblings (within range)
 
@@ -53,12 +52,5 @@ function usePagination({ currentPage, totalCount, totalPages, pageSize }) {
 
   return range;
 }
-
-usePagination.PropTypes = {
-  currentPage: PropTypes.number,
-  totalCount: PropTypes.number,
-  totalPages: PropTypes.number,
-  pageSize: PropTypes.number,
-};
 
 export default usePagination;

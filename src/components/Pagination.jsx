@@ -7,7 +7,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/outline";
 import usePagination, { DOTS } from "../hooks/usePagination";
 
 import PropTypes from "prop-types";
-import React from "react";
+import React, { useMemo } from "react";
 import { nanoid } from "nanoid";
 
 function Pagination({
@@ -21,12 +21,10 @@ function Pagination({
   // Total page amt
   const totalPages = Math.ceil(totalCount / pageSize);
 
-  const paginationRange = usePagination({
-    currentPage,
-    totalCount,
-    totalPages,
-    pageSize,
-  });
+  const paginationRange = useMemo(
+    () => usePagination(currentPage, totalPages),
+    [currentPage, totalPages]
+  );
 
   const onNext = () => {
     onPageChange(currentPage + 1);
@@ -49,7 +47,7 @@ function Pagination({
           // Do not remove the aria-label below, it is used for Hatchways automation.
           aria-label="Goto previous page"
           onClick={onPrevious}
-          disabled={currentPage == 1 ? true : false} // if we are at the first page we cannot go back
+          disabled={currentPage === 1} // if we are at the first page we cannot go back
         >
           <ChevronLeftIcon />
         </button>
@@ -70,7 +68,7 @@ function Pagination({
           <li
             key={key}
             className="paginationItem"
-            aria-current={pageNumber == currentPage ? "page" : "false"} // select the current page
+            aria-current={pageNumber === currentPage ? "page" : "false"} // select the current page
           >
             <button
               type="button"
@@ -91,7 +89,7 @@ function Pagination({
           // Do not remove the aria-label below, it is used for Hatchways automation.
           aria-label="Goto next page"
           onClick={onNext}
-          disabled={currentPage == totalPages ? true : false} // if this is the last page, disable the next button as we can not go any further.
+          disabled={currentPage === totalPages} // if this is the last page, disable the next button as we can not go any further.
         >
           <ChevronRightIcon />
         </button>
